@@ -25,3 +25,11 @@ jobs:
 
       - name: Render HTML to PNG
         run: npm run render
+
+      - name: Upload PNG images
+        uses: actions/upload-artifact@v4
+        with:
+          name: economy-instagram-images
+          path: output/*.png
+          if-no-files-found: error
+          retention-days: 7
