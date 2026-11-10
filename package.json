@@ -1,0 +1,12 @@
+{
+  "name": "economy-instagram-automation",
+  "version": "1.0.0",
+  "description": "HTML to PNG automation using Playwright",
+  "type": "module",
+  "scripts": {
+    "render": "node render.js"
+  },
+  "dependencies": {
+    "playwright": "^1.56.0"
+  }
+}
