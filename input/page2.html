@@ -4,24 +4,113 @@
 <head>
 <meta charset="UTF-8">
 <style>
-body {
-  margin: 0;
-  width: 1080px;
-  height: 1350px;
-  background: #17120a;
-  color: #ffffff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: Arial, sans-serif;
-}
-h1 {
-  font-size: 80px;
-  color: #d4af37;
-}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;width:1080px;height:1350px;background:#090909;color:#F5F1E8;font-family:Arial,"Malgun Gothic",sans-serif}
+.page{width:1080px;height:1350px;padding:55px 65px 65px;position:relative;overflow:hidden;background:radial-gradient(circle at 90% 5%,#302411 0%,#11110F 35%,#080909 80%)}
+.header{display:flex;justify-content:space-between;align-items:center}
+.brand{font-size:22px;font-weight:bold;letter-spacing:4px;color:#D8B46A}
+.date{font-size:20px;color:#B8B0A0}
+.gold-line{height:2px;margin-top:20px;background:linear-gradient(90deg,#D8B46A,#80612C,transparent)}
+.kicker{margin-top:38px;color:#D8B46A;font-size:19px;letter-spacing:5px;font-weight:bold}
+h1{margin:14px 0 10px;font-size:56px;line-height:1.12;letter-spacing:-3px}
+h1 span{color:#D8B46A}
+.subtitle{font-size:20px;color:#A9A49A;margin-top:12px}
+.section-title{margin-top:42px;margin-bottom:18px;font-size:24px;font-weight:bold}
+.section-title span{color:#D8B46A;margin-right:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card{height:174px;padding:20px 22px;border:1px solid #39342A;border-radius:12px;background:linear-gradient(135deg,#1C1B17,#11110F)}
+.card-label{font-size:17px;font-weight:bold;letter-spacing:2px;color:#D8B46A;margin-bottom:17px}
+.name{font-size:18px;color:#AAA69C;margin-bottom:24px}
+.value-row{display:flex;align-items:baseline;gap:9px}
+.value{font-size:31px;font-weight:bold;color:#F5F1E8;letter-spacing:-1px}
+.unit{font-size:15px;color:#B8B0A0}
+.change{margin-top:12px;font-size:19px;font-weight:bold}
+.up{color:#F07872}.down{color:#6DA9E8}.neutral{color:#D8B46A}
+.guide{margin-top:30px;height:300px;padding:23px 25px;border-left:4px solid #D8B46A;border-radius:5px;background:#191915;overflow:hidden}
+.guide-title{font-size:21px;font-weight:bold;color:#D8B46A;margin-bottom:17px}
+.guide-list{display:flex;flex-direction:column;gap:13px}
+.guide-item{display:flex;align-items:flex-start;gap:14px;font-size:17px;line-height:1.4;color:#DDD8CD;word-break:keep-all}
+.diamond{flex:0 0 13px;width:13px;height:13px;margin-top:4px;background:#D8B46A;transform:rotate(45deg) scale(.75)}
+.footer{position:absolute;left:65px;right:65px;bottom:35px;height:42px;padding-top:13px;border-top:1px solid #393329;display:flex;justify-content:space-between;align-items:flex-start;color:#817B70;font-size:16px;letter-spacing:2px;background:#090909}
+.footer strong{color:#D8B46A;font-size:20px}
 </style>
 </head>
 <body>
-<h1>경제 인스타그램 2페이지</h1>
+<div class="page">
+  <div class="header">
+    <div class="brand">MARKET INSIGHT</div>
+    <div class="date">{{11.market_date}}</div>
+  </div>
+  <div class="gold-line"></div>
+  <div class="kicker">GLOBAL ECONOMIC INDICATORS</div>
+  <h1>글로벌 금융시장<br><span>핵심 지표 분석</span></h1>
+  <div class="subtitle">환율 · 금리 · 원자재 시장의 주요 움직임</div>
+  <div class="section-title"><span>02</span> 글로벌 주요 지표</div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="card-label">01 / CURRENCY</div>
+      <div class="name">원 / 달러 환율</div>
+      <div class="value-row">
+        <div class="value">{{ifempty(11.currency_market.usd_krw.value; get(get(get(get(get(46.data; "chart"); "result"); 1); "meta"); "regularMarketPrice"))}}</div>
+        <div class="unit">KRW</div>
+      </div>
+      <div class="change {{if(parseNumber(ifempty(11.currency_market.usd_krw.change_percent; get(get(get(get(get(46.data; "chart"); "result"); 1); "meta"); "regularMarketChangePercent"))) > 0; "up"; if(parseNumber(ifempty(11.currency_market.usd_krw.change_percent; get(get(get(get(get(46.data; "chart"); "result"); 1); "meta"); "regularMarketChangePercent"))) < 0; "down"; "neutral"))}}">
+        {{if(parseNumber(ifempty(11.currency_market.usd_krw.change_percent; get(get(get(get(get(46.data; "chart"); "result"); 1); "meta"); "regularMarketChangePercent"))) > 0; "+"; "")}}{{ifempty(11.currency_market.usd_krw.change_percent; get(get(get(get(get(46.data; "chart"); "result"); 1); "meta"); "regularMarketChangePercent"))}}%
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">02 / BOND YIELD</div>
+      <div class="name">미국 10년물 국채금리</div>
+      <div class="value-row">
+        <div class="value">{{ifempty(11.currency_market.us_10y_yield.value; get(get(get(get(get(47.data; "chart"); "result"); 1); "meta"); "regularMarketPrice"))}}</div>
+        <div class="unit">%</div>
+      </div>
+      <div class="change neutral">
+        {{ifempty(11.currency_market.us_10y_yield.change; "변동 확인 불가")}}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">03 / ENERGY</div>
+      <div class="name">WTI 국제유가</div>
+      <div class="value-row">
+        <div class="value">${{ifempty(11.currency_market.wti_oil.value; get(get(get(get(get(48.data; "chart"); "result"); 1); "meta"); "regularMarketPrice"))}}</div>
+        <div class="unit">/ BBL</div>
+      </div>
+      <div class="change {{if(parseNumber(ifempty(11.currency_market.wti_oil.change_percent; get(get(get(get(get(48.data; "chart"); "result"); 1); "meta"); "regularMarketChangePercent"))) > 0; "up"; if(parseNumber(ifempty(11.currency_market.wti_oil.change_percent; get(get(get(get(get(48.data; "chart"); "result"); 1); "meta"); "regularMarketChangePercent"))) < 0; "down"; "neutral"))}}">
+        {{if(parseNumber(ifempty(11.currency_market.wti_oil.change_percent; get(get(get(get(get(48.data; "chart"); "result"); 1); "meta"); "regularMarketChangePercent"))) > 0; "+"; "")}}{{ifempty(11.currency_market.wti_oil.change_percent; get(get(get(get(get(48.data; "chart"); "result"); 1); "meta"); "regularMarketChangePercent"))}}%
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">04 / PRECIOUS METAL</div>
+      <div class="name">국제 금 가격</div>
+      <div class="value-row">
+        <div class="value">${{ifempty(11.currency_market.gold.value; get(get(get(get(get(49.data; "chart"); "result"); 1); "meta"); "regularMarketPrice"))}}</div>
+        <div class="unit">/ OZ</div>
+      </div>
+      <div class="change {{if(parseNumber(ifempty(11.currency_market.gold.change_percent; get(get(get(get(get(49.data; "chart"); "result"); 1); "meta"); "regularMarketChangePercent"))) > 0; "up"; if(parseNumber(ifempty(11.currency_market.gold.change_percent; get(get(get(get(get(49.data; "chart"); "result"); 1); "meta"); "regularMarketChangePercent"))) < 0; "down"; "neutral"))}}">
+        {{if(parseNumber(ifempty(11.currency_market.gold.change_percent; get(get(get(get(get(49.data; "chart"); "result"); 1); "meta"); "regularMarketChangePercent"))) > 0; "+"; "")}}{{ifempty(11.currency_market.gold.change_percent; get(get(get(get(get(49.data; "chart"); "result"); 1); "meta"); "regularMarketChangePercent"))}}%
+      </div>
+    </div>
+  </div>
+
+  <div class="guide">
+    <div class="guide-title">GLOBAL MARKET GUIDE</div>
+    <div class="guide-list">
+      <div class="guide-item"><span class="diamond"></span><span>환율: 원화 가치와 외환시장의 흐름을 확인합니다.</span></div>
+      <div class="guide-item"><span class="diamond"></span><span>미국 금리: 채권시장과 글로벌 유동성의 변화를 살펴봅니다.</span></div>
+      <div class="guide-item"><span class="diamond"></span><span>국제유가: 에너지 가격과 인플레이션 압력을 확인합니다.</span></div>
+      <div class="guide-item"><span class="diamond"></span><span>금 가격: 안전자산 선호와 시장 불확실성을 살펴봅니다.</span></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div>DAILY MARKET REPORT</div>
+    <strong>02 / 04</strong>
+  </div>
+</div>
 </body>
 </html>
