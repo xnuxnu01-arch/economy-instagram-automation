@@ -6,37 +6,39 @@
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;width:1080px;height:1350px;background:#090909;color:#F5F1E8;font-family:Arial,"Malgun Gothic",sans-serif}
-.page{width:1080px;height:1350px;padding:65px;position:relative;overflow:hidden;background:radial-gradient(circle at 90% 5%,#302411 0%,transparent 35%),linear-gradient(145deg,#11110F,#080909 75%)}
+.page{width:1080px;height:1350px;padding:55px 65px 65px;position:relative;overflow:hidden;background:radial-gradient(circle at 90% 5%,#302411 0%,transparent 35%),linear-gradient(145deg,#11110F,#080909 75%)}
 .header{display:flex;justify-content:space-between;align-items:center}
 .brand{color:#D8B46A;font-size:22px;font-weight:bold;letter-spacing:4px}
 .date{color:#B8B0A0;font-size:20px}
-.gold-line{height:2px;margin-top:25px;background:linear-gradient(90deg,#D8B46A,#80612C,transparent)}
-.kicker{margin-top:55px;color:#D8B46A;font-size:20px;font-weight:bold;letter-spacing:5px}
-h1{margin:18px 0 15px;font-size:64px;line-height:1.25;letter-spacing:-3px}
+.gold-line{height:2px;margin-top:22px;background:linear-gradient(90deg,#D8B46A,#80612C,transparent)}
+.kicker{margin-top:35px;color:#D8B46A;font-size:20px;font-weight:bold;letter-spacing:5px}
+h1{margin:13px 0 10px;font-size:60px;line-height:1.2;letter-spacing:-3px}
 h1 span{color:#D8B46A}
-.subtitle{color:#AAA69C;font-size:22px;line-height:1.5}
-.section-title{margin-top:43px;margin-bottom:22px;font-size:25px;font-weight:bold}
+.subtitle{color:#AAA69C;font-size:21px;line-height:1.45}
+.section-title{margin-top:30px;margin-bottom:17px;font-size:24px;font-weight:bold}
 .section-title span{color:#D8B46A;margin-right:12px}
-.stock-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.stock-card{height:190px;padding:22px 24px;border:1px solid #39342A;border-radius:13px;background:linear-gradient(135deg,#1C1B17,#11110F);overflow:hidden}
-.stock-card:last-child{grid-column:1 / -1;width:calc(50% - 8px);justify-self:center}
-.stock-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.stock-number{color:#D8B46A;font-size:16px;font-weight:bold;letter-spacing:2px}
-.stock-name{margin-top:12px;font-size:27px;font-weight:bold;color:#F5F1E8}
-.stock-change{margin-top:8px;font-size:23px;font-weight:bold}
+.stock-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.stock-card{height:185px;padding:18px 21px;border:1px solid #39342A;border-radius:13px;background:linear-gradient(135deg,#1C1B17,#11110F);overflow:hidden}
+.stock-card:last-child{grid-column:1 / -1;width:100%;height:165px}
+.stock-number{color:#D8B46A;font-size:15px;font-weight:bold;letter-spacing:2px}
+.stock-name{margin-top:9px;font-size:26px;font-weight:bold;color:#F5F1E8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stock-change{margin-top:6px;font-size:22px;font-weight:bold}
 .up{color:#F07872}.down{color:#6DA9E8}.neutral{color:#D8B46A}
-.stock-reason{margin-top:12px;padding-top:11px;border-top:1px solid #393329;color:#BDB6A9;font-size:17px;line-height:1.45;word-break:keep-all;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.stock-reason{margin-top:9px;padding-top:9px;border-top:1px solid #393329;color:#BDB6A9;font-size:15px;line-height:1.4;word-break:keep-all;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .reason-label{color:#D8B46A;font-weight:bold;margin-right:5px}
-.footer{position:absolute;left:65px;right:65px;bottom:45px;padding-top:20px;border-top:1px solid #393329;display:flex;justify-content:space-between;color:#817B70;font-size:17px;letter-spacing:2px}
+.stock-card:last-child .stock-reason{-webkit-line-clamp:2}
+.footer{position:absolute;left:65px;right:65px;bottom:35px;padding-top:16px;border-top:1px solid #393329;display:flex;justify-content:space-between;color:#817B70;font-size:16px;letter-spacing:2px}
 .footer strong{color:#D8B46A;font-size:20px}
 </style>
 </head>
 <body>
 <div class="page">
+
   <div class="header">
     <div class="brand">MARKET INSIGHT</div>
     <div class="date">{{11.market_date}}</div>
   </div>
+
   <div class="gold-line"></div>
 
   <div class="kicker">STOCK MARKET ANALYSIS</div>
@@ -46,56 +48,59 @@ h1 span{color:#D8B46A}
   <div class="section-title"><span>03</span> TODAY'S FEATURED STOCKS</div>
 
   <div class="stock-grid">
+
     <div class="stock-card">
-      <div class="stock-top"><div class="stock-number">TOP 01</div></div>
-      <div class="stock-name">{{get(11.featured_stocks; "1.name")}}</div>
-      <div class="stock-change {{if(parseNumber(get(11.featured_stocks; "1.change_percent")) > 0; "up"; if(parseNumber(get(11.featured_stocks; "1.change_percent")) < 0; "down"; "neutral"))}}">
-        {{if(parseNumber(get(11.featured_stocks; "1.change_percent")) > 0; "+"; "")}}{{get(11.featured_stocks; "1.change_percent")}}%
+      <div class="stock-number">TOP 01</div>
+      <div class="stock-name">{{11.featured_stocks; "1.name"}}</div>
+      <div class="stock-change {{11.featured_stocks; "1.change_percent"}}">
+        {{if(parseNumber(11.featured_stocks; "1.change_percent") > 0; "+"; "")}}{{11.featured_stocks; "1.change_percent"}}%
       </div>
-      <div class="stock-reason"><span class="reason-label">KEY ISSUE</span>{{ifempty(get(11.featured_stocks; "1.reason"); "분석 근거 데이터 없음")}}</div>
+      <div class="stock-reason"><span class="reason-label">KEY ISSUE</span>{{11.featured_stocks; "1.reason"}}</div>
     </div>
 
     <div class="stock-card">
-      <div class="stock-top"><div class="stock-number">TOP 02</div></div>
-      <div class="stock-name">{{get(11.featured_stocks; "2.name")}}</div>
-      <div class="stock-change {{if(parseNumber(get(11.featured_stocks; "2.change_percent")) > 0; "up"; if(parseNumber(get(11.featured_stocks; "2.change_percent")) < 0; "down"; "neutral"))}}">
-        {{if(parseNumber(get(11.featured_stocks; "2.change_percent")) > 0; "+"; "")}}{{get(11.featured_stocks; "2.change_percent")}}%
+      <div class="stock-number">TOP 02</div>
+      <div class="stock-name">{{11.featured_stocks; "2.name"}}</div>
+      <div class="stock-change {{11.featured_stocks; "2.change_percent"}}">
+        {{if(parseNumber(11.featured_stocks; "2.change_percent") > 0; "+"; "")}}{{11.featured_stocks; "2.change_percent"}}%
       </div>
-      <div class="stock-reason"><span class="reason-label">KEY ISSUE</span>{{ifempty(get(11.featured_stocks; "2.reason"); "분석 근거 데이터 없음")}}</div>
+      <div class="stock-reason"><span class="reason-label">KEY ISSUE</span>{{11.featured_stocks; "2.reason"}}</div>
     </div>
 
     <div class="stock-card">
-      <div class="stock-top"><div class="stock-number">TOP 03</div></div>
-      <div class="stock-name">{{get(11.featured_stocks; "3.name")}}</div>
-      <div class="stock-change {{if(parseNumber(get(11.featured_stocks; "3.change_percent")) > 0; "up"; if(parseNumber(get(11.featured_stocks; "3.change_percent")) < 0; "down"; "neutral"))}}">
-        {{if(parseNumber(get(11.featured_stocks; "3.change_percent")) > 0; "+"; "")}}{{get(11.featured_stocks; "3.change_percent")}}%
+      <div class="stock-number">TOP 03</div>
+      <div class="stock-name">{{11.featured_stocks; "3.name"}}</div>
+      <div class="stock-change {{11.featured_stocks; "3.change_percent"}}">
+        {{if(parseNumber(11.featured_stocks; "3.change_percent") > 0; "+"; "")}}{{11.featured_stocks; "3.change_percent"}}%
       </div>
-      <div class="stock-reason"><span class="reason-label">KEY ISSUE</span>{{ifempty(get(11.featured_stocks; "3.reason"); "분석 근거 데이터 없음")}}</div>
+      <div class="stock-reason"><span class="reason-label">KEY ISSUE</span>{{11.featured_stocks; "3.reason"}}</div>
     </div>
 
     <div class="stock-card">
-      <div class="stock-top"><div class="stock-number">TOP 04</div></div>
-      <div class="stock-name">{{get(11.featured_stocks; "4.name")}}</div>
-      <div class="stock-change {{if(parseNumber(get(11.featured_stocks; "4.change_percent")) > 0; "up"; if(parseNumber(get(11.featured_stocks; "4.change_percent")) < 0; "down"; "neutral"))}}">
-        {{if(parseNumber(get(11.featured_stocks; "4.change_percent")) > 0; "+"; "")}}{{get(11.featured_stocks; "4.change_percent")}}%
+      <div class="stock-number">TOP 04</div>
+      <div class="stock-name">{{11.featured_stocks; "4.name"}}</div>
+      <div class="stock-change {{11.featured_stocks; "4.change_percent"}}">
+        {{if(parseNumber(11.featured_stocks; "4.change_percent") > 0; "+"; "")}}{{11.featured_stocks; "4.change_percent"}}%
       </div>
-      <div class="stock-reason"><span class="reason-label">KEY ISSUE</span>{{ifempty(get(11.featured_stocks; "4.reason"); "분석 근거 데이터 없음")}}</div>
+      <div class="stock-reason"><span class="reason-label">KEY ISSUE</span>{{11.featured_stocks; "4.reason"}}</div>
     </div>
 
     <div class="stock-card">
-      <div class="stock-top"><div class="stock-number">TOP 05</div></div>
-      <div class="stock-name">{{get(11.featured_stocks; "5.name")}}</div>
-      <div class="stock-change {{if(parseNumber(get(11.featured_stocks; "5.change_percent")) > 0; "up"; if(parseNumber(get(11.featured_stocks; "5.change_percent")) < 0; "down"; "neutral"))}}">
-        {{if(parseNumber(get(11.featured_stocks; "5.change_percent")) > 0; "+"; "")}}{{get(11.featured_stocks; "5.change_percent")}}%
+      <div class="stock-number">TOP 05</div>
+      <div class="stock-name">{{11.featured_stocks; "5.name"}}</div>
+      <div class="stock-change {{11.featured_stocks; "5.change_percent"}}">
+        {{if(parseNumber(11.featured_stocks; "5.change_percent") > 0; "+"; "")}}{{11.featured_stocks; "5.change_percent"}}%
       </div>
-      <div class="stock-reason"><span class="reason-label">KEY ISSUE</span>{{ifempty(get(11.featured_stocks; "5.reason"); "분석 근거 데이터 없음")}}</div>
+      <div class="stock-reason"><span class="reason-label">KEY ISSUE</span>{{11.featured_stocks; "5.reason"}}</div>
     </div>
+
   </div>
 
   <div class="footer">
     <div>DAILY MARKET REPORT</div>
     <strong>03 / 04</strong>
   </div>
+
 </div>
 </body>
 </html>
