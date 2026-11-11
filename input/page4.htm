@@ -4,24 +4,88 @@
 <head>
 <meta charset="UTF-8">
 <style>
-body {
-  margin: 0;
-  width: 1080px;
-  height: 1350px;
-  background: #17120a;
-  color: #ffffff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: Arial, sans-serif;
-}
-h1 {
-  font-size: 80px;
-  color: #d4af37;
-}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;width:1080px;height:1350px;background:#090909;color:#F5F1E8;font-family:Arial,"Malgun Gothic",sans-serif}
+.page{width:1080px;height:1350px;padding:48px 65px 100px;position:relative;overflow:hidden;background:radial-gradient(circle at 90% 5%,#302411 0%,transparent 35%),linear-gradient(145deg,#11110F,#080909 75%)}
+.header{display:flex;justify-content:space-between;align-items:center}
+.brand{color:#D8B46A;font-size:22px;font-weight:bold;letter-spacing:4px}
+.date{color:#B8B0A0;font-size:20px}
+.gold-line{height:2px;margin-top:18px;background:linear-gradient(90deg,#D8B46A,#80612C,transparent)}
+.kicker{margin-top:27px;color:#D8B46A;font-size:18px;font-weight:bold;letter-spacing:5px}
+h1{margin:10px 0 8px;font-size:53px;line-height:1.13;letter-spacing:-2px}
+h1 span{color:#D8B46A}
+.subtitle{color:#AAA69C;font-size:19px;line-height:1.4}
+.section-title{margin-top:22px;margin-bottom:10px;color:#D8B46A;font-size:21px;font-weight:bold;letter-spacing:1px}
+.issue-card{padding:11px 19px;margin-bottom:8px;border:1px solid #39342A;border-radius:11px;background:linear-gradient(135deg,#1C1B17,#11110F);overflow:hidden}
+.issue-number{color:#D8B46A;font-size:14px;font-weight:bold;letter-spacing:2px;margin-bottom:5px}
+.issue-title{color:#F5F1E8;font-size:19px;font-weight:bold;line-height:1.3;word-break:keep-all;overflow-wrap:anywhere}
+.issue-description{margin-top:5px;color:#C3BCAE;font-size:15px;line-height:1.38;word-break:keep-all;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.korea-section{margin-top:13px}
+.korea-section .section-title{margin-top:0;margin-bottom:9px}
+.korea-card{padding:13px 19px;border-left:4px solid #D8B46A;border-radius:5px;background:#191915}
+.korea-title{color:#D8B46A;font-size:19px;font-weight:bold;margin-bottom:7px}
+.korea-text{color:#DDD8CD;font-size:15px;line-height:1.38;word-break:keep-all;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+.tomorrow-card{margin-top:12px;padding:13px 19px;border:1px solid #80612C;border-radius:11px;background:linear-gradient(135deg,#211C12,#15130E);overflow:hidden}
+.tomorrow-title{color:#E0BC73;font-size:19px;font-weight:bold;letter-spacing:1px;margin-bottom:7px}
+.tomorrow-text{color:#DDD5C6;font-size:15px;line-height:1.38;word-break:keep-all;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.footer{position:absolute;left:65px;right:65px;bottom:35px;height:42px;padding-top:13px;border-top:1px solid #393329;display:flex;justify-content:space-between;align-items:flex-start;color:#817B70;font-size:16px;letter-spacing:2px;background:#090909}
+.footer strong{color:#D8B46A;font-size:20px}
 </style>
 </head>
 <body>
-<h1>경제 인스타그램 4페이지</h1>
+<div class="page">
+
+  <div class="header">
+    <div class="brand">MARKET INSIGHT</div>
+    <div class="date">{{11.market_date}}</div>
+  </div>
+
+  <div class="gold-line"></div>
+
+  <div class="kicker">ECONOMIC ISSUES & OUTLOOK</div>
+
+  <h1>핵심 경제 이슈와<br><span>내일의 전망</span></h1>
+
+  <div class="subtitle">시장을 움직인 주요 변수와 다음 거래일 체크포인트</div>
+
+  <div class="section-title">TODAY'S KEY ISSUES</div>
+
+  <div class="issue-card">
+    <div class="issue-number">ISSUE 01</div>
+    <div class="issue-title">{{get(get(11.economic_issues; 1); "title")}}</div>
+    <div class="issue-description">{{ifempty(get(get(11.economic_issues; 1); "description"); "상세 내용 확인 불가")}}</div>
+  </div>
+
+  <div class="issue-card">
+    <div class="issue-number">ISSUE 02</div>
+    <div class="issue-title">{{get(get(11.economic_issues; 2); "title")}}</div>
+    <div class="issue-description">{{ifempty(get(get(11.economic_issues; 2); "description"); "상세 내용 확인 불가")}}</div>
+  </div>
+
+  <div class="issue-card">
+    <div class="issue-number">ISSUE 03</div>
+    <div class="issue-title">{{get(get(11.economic_issues; 3); "title")}}</div>
+    <div class="issue-description">{{ifempty(get(get(11.economic_issues; 3); "description"); "상세 내용 확인 불가")}}</div>
+  </div>
+
+  <div class="korea-section">
+    <div class="section-title">KOREA MARKET VIEW</div>
+    <div class="korea-card">
+      <div class="korea-title">국내 증시 종합 분석</div>
+      <div class="korea-text">{{ifempty(11.korea_market_analysis; ifempty(11.domestic_market_analysis; "국내 증시 분석 데이터가 없습니다."))}}</div>
+    </div>
+  </div>
+
+  <div class="tomorrow-card">
+    <div class="tomorrow-title">NEXT TRADING DAY CHECKPOINT</div>
+    <div class="tomorrow-text">{{ifempty(11.tomorrow_focus; ifempty(11.tomorrow_checkpoints; "다음 거래일 주요 일정 확인이 필요합니다."))}}</div>
+  </div>
+
+  <div class="footer">
+    <div>DAILY MARKET REPORT</div>
+    <strong>04 / 04</strong>
+  </div>
+
+</div>
 </body>
 </html>
