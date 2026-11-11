@@ -42,7 +42,6 @@ function directionClass(value) {
 // 배열 데이터 가져오기 (1부터 시작)
 function getArrayItem(array, oneBasedIndex) {
   if (!Array.isArray(array)) return undefined;
-
   return array[oneBasedIndex - 1];
 }
 
@@ -234,7 +233,7 @@ function renderTemplate(html) {
 
 // 메인 실행
 async function main() {
-  console.log("===== HTML TO PNG 시작 =====");
+  console.log("===== HTML TO JPEG 시작 =====");
 
   // JSON 파일 확인
   if (!fs.existsSync(dataPath)) {
@@ -271,9 +270,9 @@ async function main() {
   fs.mkdirSync(outputDir, { recursive: true });
   fs.mkdirSync(renderedDir, { recursive: true });
 
-  // 기존 PNG 삭제
+  // 기존 PNG / JPG 삭제
   for (const file of fs.readdirSync(outputDir)) {
-    if (/^page\d+\.png$/i.test(file)) {
+    if (/^page\d+\.(png|jpg|jpeg)$/i.test(file)) {
       fs.unlinkSync(path.join(outputDir, file));
     }
   }
@@ -323,7 +322,7 @@ async function main() {
 
       const outputName = file.replace(
         /\.html$/i,
-        ".png"
+        ".jpg"
       );
 
       const outputPath = path.join(
@@ -366,11 +365,12 @@ async function main() {
         }
       );
 
-      // PNG 생성
+      // JPEG 생성
       await page.screenshot({
         path: outputPath,
         fullPage: false,
-        type: "png"
+        type: "jpeg",
+        quality: 90
       });
 
       console.log(
@@ -378,7 +378,7 @@ async function main() {
       );
     }
 
-    console.log("===== PNG 4장 생성 완료 =====");
+    console.log("===== JPEG 4장 생성 완료 =====");
 
   } finally {
     await browser.close();
@@ -388,6 +388,5 @@ async function main() {
 // 실행
 main().catch(error => {
   console.error("렌더링 실패:", error);
-
   process.exit(1);
 });
