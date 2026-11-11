@@ -3,6 +3,11 @@ name: HTML to PNG
 
 on:
   workflow_dispatch:
+    inputs:
+      data:
+        description: "Make.com JSON data"
+        required: true
+        type: string
 
 jobs:
   render:
@@ -22,6 +27,14 @@ jobs:
 
       - name: Install Playwright browser
         run: npx playwright install --with-deps chromium
+
+      - name: Save JSON data
+        env:
+          JSON_DATA: ${{ inputs.data }}
+        run: |
+          mkdir -p input
+          printf '%s' "$JSON_DATA" > input/data.json
+          node -e "JSON.parse(require('fs').readFileSync('input/data.json', 'utf8')); console.log('JSON 데이터 확인 완료')"
 
       - name: Render HTML to PNG
         run: npm run render
