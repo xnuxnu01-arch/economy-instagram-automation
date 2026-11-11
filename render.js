@@ -9,6 +9,9 @@ const renderedDir = "./rendered";
 
 const dataPath = path.join(inputDir, "data.json");
 
+let data = {};
+
+// HTML 특수문자 처리
 function escapeHtml(value) {
   return String(value ?? "")
     .replace(/&/g, "&amp;")
@@ -18,30 +21,37 @@ function escapeHtml(value) {
     .replace(/'/g, "&#39;");
 }
 
+// 숫자 변환
 function numberValue(value) {
-  const n = Number.parseFloat(String(value ?? "").replace(/,/g, ""));
+  const n = Number.parseFloat(
+    String(value ?? "").replace(/,/g, "")
+  );
+
   return Number.isFinite(n) ? n : null;
 }
 
+// 상승 / 하락 색상
 function directionClass(value) {
   const n = numberValue(value);
 
   if (n === null || n === 0) return "neutral";
+
   return n > 0 ? "up" : "down";
 }
 
-function signedPercent(value) {
-  const n = numberValue(value);
-
-  if (n === null) return "확인 불가";
-  return `${n > 0 ? "+" : ""}${value}%`;
-}
-
+// 배열 데이터 가져오기 (1부터 시작)
 function getArrayItem(array, oneBasedIndex) {
   if (!Array.isArray(array)) return undefined;
+
   return array[oneBasedIndex - 1];
 }
 
+// HTML class 속성 내부인지 확인
+function isClassAttribute(htmlBefore) {
+  return /class=["'][^"']*$/.test(htmlBefore);
+}
+
+// Make.com HTML 표현식 처리
 function resolveExpression(expression, htmlBefore) {
   const expr = expression.trim();
 
@@ -56,12 +66,18 @@ function resolveExpression(expression, htmlBefore) {
   }
 
   // 시장 종합 분석
-  if (expr.includes("market_analysis") && !expr.includes("korea_market_analysis")) {
+  if (
+    expr.includes("market_analysis") &&
+    !expr.includes("korea_market_analysis")
+  ) {
     return escapeHtml(data.market_analysis ?? "");
   }
 
   // 국내 증시 분석
-  if (expr.includes("korea_market_analysis") || expr.includes("domestic_market_analysis")) {
+  if (
+    expr.includes("korea_market_analysis") ||
+    expr.includes("domestic_market_analysis")
+  ) {
     return escapeHtml(
       data.korea_market_analysis ??
       data.domestic_market_analysis ??
@@ -70,7 +86,10 @@ function resolveExpression(expression, htmlBefore) {
   }
 
   // 다음 거래일 전망
-  if (expr.includes("tomorrow_focus") || expr.includes("tomorrow_checkpoints")) {
+  if (
+    expr.includes("tomorrow_focus") ||
+    expr.includes("tomorrow_checkpoints")
+  ) {
     return escapeHtml(
       data.tomorrow_focus ??
       data.tomorrow_checkpoints ??
@@ -78,23 +97,34 @@ function resolveExpression(expression, htmlBefore) {
     );
   }
 
-  // 주요 지수: indices 배열
-  const indexMatch = expr.match(/indices;\s*["'](\d+)\.(value|change_percent)["']/);
+  // 주요 지수
+  const indexMatch = expr.match(
+    /indices;\s*["'](\d+)\.(value|change_percent)["']/
+  );
 
   if (indexMatch) {
-    const item = getArrayItem(data.indices, Number(indexMatch[1]));
+    const item = getArrayItem(
+      data.indices,
+      Number(indexMatch[1])
+    );
+
     const field = indexMatch[2];
     const value = item?.[field];
 
-  if (field === "change_percent") {
-  if (/class=["'][^"']*$/.test(htmlBefore)) {
-    return directionClass(value);
+    if (field === "change_percent") {
+      if (isClassAttribute(htmlBefore)) {
+        return directionClass(value);
+      }
+
+      if (expr.includes("if(parseNumber")) {
+        return numberValue(value) > 0 ? "+" : "";
+      }
+
+      return escapeHtml(value ?? "0");
+    }
+
+    return escapeHtml(value ?? "확인 불가");
   }
-  if (expr.includes("if(parseNumber")) {
-    return numberValue(value) > 0 ? "+" : "";
-  }
-  return escapeHtml(value ?? "0");
-}
 
   // 통화 및 원자재 지표
   const currencyMatch = expr.match(
@@ -106,17 +136,24 @@ function resolveExpression(expression, htmlBefore) {
     const field = currencyMatch[2];
     const value = item?.[field];
 
- if (field === "change_percent") {
-  if (/class=["'][^"']*$/.test(htmlBefore)) {
-    return directionClass(value);
-  }
-  if (expr.includes("if(parseNumber")) {
-    return numberValue(value) > 0 ? "+" : "";
-  }
-  return escapeHtml(value ?? "0");
-}
+    if (field === "change_percent") {
+      if (isClassAttribute(htmlBefore)) {
+        return directionClass(value);
+      }
 
-    return escapeHtml(value ?? (field === "change" ? "변동 확인 불가" : "확인 불가"));
+      if (expr.includes("if(parseNumber")) {
+        return numberValue(value) > 0 ? "+" : "";
+      }
+
+      return escapeHtml(value ?? "0");
+    }
+
+    return escapeHtml(
+      value ??
+      (field === "change"
+        ? "변동 확인 불가"
+        : "확인 불가")
+    );
   }
 
   // 주요 종목
@@ -125,21 +162,32 @@ function resolveExpression(expression, htmlBefore) {
   );
 
   if (stockMatch) {
-    const item = getArrayItem(data.featured_stocks, Number(stockMatch[1]));
+    const item = getArrayItem(
+      data.featured_stocks,
+      Number(stockMatch[1])
+    );
+
     const field = stockMatch[2];
     const value = item?.[field];
 
-   if (field === "change_percent") {
-  if (/class=["'][^"']*$/.test(htmlBefore)) {
-    return directionClass(value);
-  }
-  if (expr.includes("if(parseNumber")) {
-    return numberValue(value) > 0 ? "+" : "";
-  }
-  return escapeHtml(value ?? "0");
-}
+    if (field === "change_percent") {
+      if (isClassAttribute(htmlBefore)) {
+        return directionClass(value);
+      }
 
-    return escapeHtml(value ?? (field === "reason" ? "분석 근거 데이터 없음" : "데이터 없음"));
+      if (expr.includes("if(parseNumber")) {
+        return numberValue(value) > 0 ? "+" : "";
+      }
+
+      return escapeHtml(value ?? "0");
+    }
+
+    return escapeHtml(
+      value ??
+      (field === "reason"
+        ? "분석 근거 데이터 없음"
+        : "데이터 없음")
+    );
   }
 
   // 경제 이슈
@@ -148,89 +196,198 @@ function resolveExpression(expression, htmlBefore) {
   );
 
   if (issueMatch) {
-    const item = getArrayItem(data.economic_issues, Number(issueMatch[1]));
+    const item = getArrayItem(
+      data.economic_issues,
+      Number(issueMatch[1])
+    );
+
     const field = issueMatch[2];
 
     return escapeHtml(
       item?.[field] ??
-      (field === "title" ? "추가 경제 이슈 없음" : "상세 내용 확인 불가")
+      (field === "title"
+        ? "추가 경제 이슈 없음"
+        : "상세 내용 확인 불가")
     );
   }
 
-  // 위에서 처리하지 못한 표현식은 원문 대신 빈 값으로 처리
+  // 처리하지 못한 표현식
   console.warn("처리하지 못한 HTML 표현식:", expr);
+
   return "";
 }
 
+// HTML 템플릿에 실제 데이터 삽입
 function renderTemplate(html) {
-  return html.replace(/\{\{([\s\S]*?)\}\}/g, (match, expression, offset) => {
-    const before = html.slice(Math.max(0, offset - 100), offset);
-    return resolveExpression(expression, before);
-  });
+  return html.replace(
+    /\{\{([\s\S]*?)\}\}/g,
+    (match, expression, offset) => {
+      const before = html.slice(
+        Math.max(0, offset - 100),
+        offset
+      );
+
+      return resolveExpression(expression, before);
+    }
+  );
 }
 
+// 메인 실행
 async function main() {
+  console.log("===== HTML TO PNG 시작 =====");
+
+  // JSON 파일 확인
   if (!fs.existsSync(dataPath)) {
     throw new Error("input/data.json 파일이 없습니다.");
   }
 
-  data = JSON.parse(fs.readFileSync(dataPath, "utf8"));
+  // JSON 데이터 읽기
+  data = JSON.parse(
+    fs.readFileSync(dataPath, "utf8")
+  );
 
+  if (!data || typeof data !== "object") {
+    throw new Error("JSON 데이터 형식이 올바르지 않습니다.");
+  }
+
+  console.log("JSON 데이터 읽기 성공");
+
+  console.log(
+    "주요 지수:",
+    data.indices?.length ?? 0
+  );
+
+  console.log(
+    "주요 종목:",
+    data.featured_stocks?.length ?? 0
+  );
+
+  console.log(
+    "경제 이슈:",
+    data.economic_issues?.length ?? 0
+  );
+
+  // 출력 폴더 생성
   fs.mkdirSync(outputDir, { recursive: true });
   fs.mkdirSync(renderedDir, { recursive: true });
 
+  // 기존 PNG 삭제
+  for (const file of fs.readdirSync(outputDir)) {
+    if (/^page\d+\.png$/i.test(file)) {
+      fs.unlinkSync(path.join(outputDir, file));
+    }
+  }
+
+  // HTML 4개 검색
   const files = fs.readdirSync(inputDir)
     .filter(file => /^page\d+\.html$/i.test(file))
     .sort((a, b) => {
       const numA = Number(a.match(/\d+/)[0]);
       const numB = Number(b.match(/\d+/)[0]);
+
       return numA - numB;
     });
 
   if (files.length !== 4) {
-    throw new Error(`HTML 파일은 4개가 필요합니다. 현재 ${files.length}개입니다.`);
+    throw new Error(
+      `HTML 파일은 4개가 필요합니다. 현재 ${files.length}개입니다.`
+    );
   }
 
-  const browser = await chromium.launch({ headless: true });
+  console.log("HTML 파일 4개 확인 완료");
+
+  // Playwright 실행
+  const browser = await chromium.launch({
+    headless: true
+  });
 
   try {
     const page = await browser.newPage({
-      viewport: { width: 1080, height: 1350 },
+      viewport: {
+        width: 1080,
+        height: 1350
+      },
       deviceScaleFactor: 1
     });
 
+    // HTML 4개 순차 렌더링
     for (const file of files) {
+      console.log(`렌더링 시작: ${file}`);
+
       const inputPath = path.join(inputDir, file);
-      const renderedPath = path.join(renderedDir, file);
-      const outputName = file.replace(/\.html$/i, ".png");
-      const outputPath = path.join(outputDir, outputName);
 
-      const originalHtml = fs.readFileSync(inputPath, "utf8");
-      const finalHtml = renderTemplate(originalHtml);
-
-      fs.writeFileSync(renderedPath, finalHtml, "utf8");
-
-      await page.goto(
-        "file://" + path.resolve(renderedPath),
-        { waitUntil: "networkidle" }
+      const renderedPath = path.join(
+        renderedDir,
+        file
       );
 
+      const outputName = file.replace(
+        /\.html$/i,
+        ".png"
+      );
+
+      const outputPath = path.join(
+        outputDir,
+        outputName
+      );
+
+      // 기존 HTML 읽기
+      const originalHtml = fs.readFileSync(
+        inputPath,
+        "utf8"
+      );
+
+      // JSON 데이터 삽입
+      const finalHtml = renderTemplate(originalHtml);
+
+      // 남아 있는 표현식 확인
+      const remaining = finalHtml.match(
+        /\{\{[\s\S]*?\}\}/g
+      );
+
+      if (remaining) {
+        console.warn(
+          `${file}: 처리되지 않은 표현식 ${remaining.length}개`
+        );
+      }
+
+      // 렌더링 HTML 저장
+      fs.writeFileSync(
+        renderedPath,
+        finalHtml,
+        "utf8"
+      );
+
+      // 브라우저에 HTML 표시
+      await page.goto(
+        "file://" + path.resolve(renderedPath),
+        {
+          waitUntil: "networkidle"
+        }
+      );
+
+      // PNG 생성
       await page.screenshot({
         path: outputPath,
         fullPage: false,
         type: "png"
       });
 
-      console.log(`이미지 생성 완료: ${outputName}`);
+      console.log(
+        `이미지 생성 완료: ${outputName}`
+      );
     }
+
+    console.log("===== PNG 4장 생성 완료 =====");
+
   } finally {
     await browser.close();
   }
 }
 
-let data = {};
-
+// 실행
 main().catch(error => {
-  console.error(error);
+  console.error("렌더링 실패:", error);
+
   process.exit(1);
 });
