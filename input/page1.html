@@ -4,21 +4,91 @@
 <head>
 <meta charset="UTF-8">
 <style>
-body {
-  margin: 0;
-  width: 1080px;
-  height: 1350px;
-  background: #101010;
-  color: #d4af37;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: Arial, sans-serif;
-}
-h1 { font-size: 80px; }
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;width:1080px;height:1350px;background:#090909;color:#F5F1E8;font-family:Arial,"Malgun Gothic",sans-serif}
+.page{width:1080px;height:1350px;padding:55px 65px 65px;position:relative;overflow:hidden;background:radial-gradient(circle at 90% 5%,#302411 0%,#11110F 35%,#080909 80%)}
+.header{display:flex;justify-content:space-between;align-items:center}
+.brand{font-size:22px;font-weight:bold;letter-spacing:4px;color:#D8B46A}
+.date{font-size:20px;color:#B8B0A0}
+.gold-line{height:2px;margin-top:20px;background:linear-gradient(90deg,#D8B46A,#80612C,transparent)}
+.kicker{margin-top:38px;color:#D8B46A;font-size:19px;letter-spacing:5px;font-weight:bold}
+h1{margin:14px 0 10px;font-size:58px;line-height:1.15;letter-spacing:-3px}
+h1 span{color:#D8B46A}
+.subtitle{font-size:21px;color:#A9A49A}
+.status{display:inline-block;margin-top:18px;padding:11px 23px;border:1px solid #96733C;border-radius:30px;background:rgba(216,180,106,.08);color:#E2C17F;font-size:19px;font-weight:bold}
+.section-title{margin-top:30px;margin-bottom:17px;font-size:24px;font-weight:bold}
+.section-title span{color:#D8B46A;margin-right:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.card{height:105px;padding:15px 22px;border:1px solid #39342A;border-radius:12px;background:linear-gradient(135deg,#1C1B17,#11110F)}
+.name{font-size:18px;color:#AAA69C;margin-bottom:10px}
+.values{display:flex;justify-content:space-between;align-items:center}
+.value{font-size:29px;font-weight:bold;color:#F5F1E8;letter-spacing:-1px}
+.change{font-size:20px;font-weight:bold}
+.up{color:#F07872}.down{color:#6DA9E8}.neutral{color:#D8B46A}
+.analysis{margin-top:25px;padding:19px 24px;border-left:4px solid #D8B46A;border-radius:5px;background:#191915;max-height:245px;overflow:hidden}
+.analysis-title{font-size:21px;font-weight:bold;color:#D8B46A;margin-bottom:11px}
+.analysis-content{font-size:18px;line-height:1.45;color:#DDD8CD;word-break:keep-all;overflow-wrap:anywhere;max-height:175px;overflow:hidden}
+.footer{position:absolute;left:65px;right:65px;bottom:35px;height:42px;padding-top:13px;border-top:1px solid #393329;display:flex;justify-content:space-between;align-items:flex-start;color:#817B70;font-size:16px;letter-spacing:2px;background:#090909}
+.footer strong{color:#D8B46A;font-size:20px}
 </style>
 </head>
 <body>
-<h1>경제 인스타그램 1페이지</h1>
+<div class="page">
+  <div class="header">
+    <div class="brand">MARKET INSIGHT</div>
+    <div class="date">{{11.market_date}}</div>
+  </div>
+  <div class="gold-line"></div>
+  <div class="kicker">GLOBAL FINANCIAL MARKET</div>
+  <h1>오늘의 증시<br><span>한눈에 보기</span></h1>
+  <div class="subtitle">글로벌 금융시장 주요 지수 및 시장 흐름 분석</div>
+  <div class="status">MARKET : {{11.market_status}}</div>
+  <div class="section-title"><span>01</span> 주요 시장 지수</div>
+  <div class="grid">
+    <div class="card">
+      <div class="name">DOW JONES</div>
+      <div class="values">
+        <div class="value">{{get(11.indices; "1.value")}}</div>
+        <div class="change {{if(parseNumber(get(11.indices; "1.change_percent")) > 0; "up"; if(parseNumber(get(11.indices; "1.change_percent")) < 0; "down"; "neutral"))}}">{{if(parseNumber(get(11.indices; "1.change_percent")) > 0; "+"; "")}}{{get(11.indices; "1.change_percent")}}%</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="name">S&P 500</div>
+      <div class="values">
+        <div class="value">{{get(11.indices; "2.value")}}</div>
+        <div class="change {{if(parseNumber(get(11.indices; "2.change_percent")) > 0; "up"; if(parseNumber(get(11.indices; "2.change_percent")) < 0; "down"; "neutral"))}}">{{if(parseNumber(get(11.indices; "2.change_percent")) > 0; "+"; "")}}{{get(11.indices; "2.change_percent")}}%</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="name">NASDAQ</div>
+      <div class="values">
+        <div class="value">{{get(11.indices; "3.value")}}</div>
+        <div class="change {{if(parseNumber(get(11.indices; "3.change_percent")) > 0; "up"; if(parseNumber(get(11.indices; "3.change_percent")) < 0; "down"; "neutral"))}}">{{if(parseNumber(get(11.indices; "3.change_percent")) > 0; "+"; "")}}{{get(11.indices; "3.change_percent")}}%</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="name">KOSPI</div>
+      <div class="values">
+        <div class="value">{{get(11.indices; "4.value")}}</div>
+        <div class="change {{if(parseNumber(get(11.indices; "4.change_percent")) > 0; "up"; if(parseNumber(get(11.indices; "4.change_percent")) < 0; "down"; "neutral"))}}">{{if(parseNumber(get(11.indices; "4.change_percent")) > 0; "+"; "")}}{{get(11.indices; "4.change_percent")}}%</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="name">KOSDAQ</div>
+      <div class="values">
+        <div class="value">{{get(11.indices; "5.value")}}</div>
+        <div class="change {{if(parseNumber(get(11.indices; "5.change_percent")) > 0; "up"; if(parseNumber(get(11.indices; "5.change_percent")) < 0; "down"; "neutral"))}}">{{if(parseNumber(get(11.indices; "5.change_percent")) > 0; "+"; "")}}{{get(11.indices; "5.change_percent")}}%</div>
+      </div>
+    </div>
+  </div>
+  <div class="analysis">
+    <div class="analysis-title">MARKET ANALYSIS</div>
+    <div class="analysis-content">{{11.market_analysis}}</div>
+  </div>
+  <div class="footer">
+    <div>DAILY MARKET REPORT</div>
+    <strong>01 / 04</strong>
+  </div>
+</div>
 </body>
 </html>
