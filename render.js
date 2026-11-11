@@ -86,15 +86,15 @@ function resolveExpression(expression, htmlBefore) {
     const field = indexMatch[2];
     const value = item?.[field];
 
-    if (field === "change_percent") {
-      if (/class=["'][^"']*$/.test(htmlBefore)) {
-        return directionClass(value);
-      }
-      return signedPercent(value);
-    }
-
-    return escapeHtml(value ?? "확인 불가");
+  if (field === "change_percent") {
+  if (/class=["'][^"']*$/.test(htmlBefore)) {
+    return directionClass(value);
   }
+  if (expr.includes("if(parseNumber")) {
+    return numberValue(value) > 0 ? "+" : "";
+  }
+  return escapeHtml(value ?? "0");
+}
 
   // 통화 및 원자재 지표
   const currencyMatch = expr.match(
@@ -106,12 +106,15 @@ function resolveExpression(expression, htmlBefore) {
     const field = currencyMatch[2];
     const value = item?.[field];
 
-    if (field === "change_percent") {
-      if (/class=["'][^"']*$/.test(htmlBefore)) {
-        return directionClass(value);
-      }
-      return signedPercent(value);
-    }
+ if (field === "change_percent") {
+  if (/class=["'][^"']*$/.test(htmlBefore)) {
+    return directionClass(value);
+  }
+  if (expr.includes("if(parseNumber")) {
+    return numberValue(value) > 0 ? "+" : "";
+  }
+  return escapeHtml(value ?? "0");
+}
 
     return escapeHtml(value ?? (field === "change" ? "변동 확인 불가" : "확인 불가"));
   }
@@ -126,12 +129,15 @@ function resolveExpression(expression, htmlBefore) {
     const field = stockMatch[2];
     const value = item?.[field];
 
-    if (field === "change_percent") {
-      if (/class=["'][^"']*$/.test(htmlBefore)) {
-        return directionClass(value);
-      }
-      return signedPercent(value);
-    }
+   if (field === "change_percent") {
+  if (/class=["'][^"']*$/.test(htmlBefore)) {
+    return directionClass(value);
+  }
+  if (expr.includes("if(parseNumber")) {
+    return numberValue(value) > 0 ? "+" : "";
+  }
+  return escapeHtml(value ?? "0");
+}
 
     return escapeHtml(value ?? (field === "reason" ? "분석 근거 데이터 없음" : "데이터 없음"));
   }
