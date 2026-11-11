@@ -11,22 +11,22 @@ html,body{margin:0;padding:0;width:1080px;height:1350px;background:#090909;color
 .brand{color:#D8B46A;font-size:22px;font-weight:bold;letter-spacing:4px}
 .date{color:#B8B0A0;font-size:20px}
 .gold-line{height:2px;margin-top:22px;background:linear-gradient(90deg,#D8B46A,#80612C,transparent)}
-.kicker{margin-top:35px;color:#D8B46A;font-size:20px;font-weight:bold;letter-spacing:5px}
-h1{margin:13px 0 10px;font-size:60px;line-height:1.2;letter-spacing:-3px}
+.kicker{margin-top:30px;color:#D8B46A;font-size:20px;font-weight:bold;letter-spacing:5px}
+h1{margin:10px 0 8px;font-size:58px;line-height:1.15;letter-spacing:-3px}
 h1 span{color:#D8B46A}
-.subtitle{color:#AAA69C;font-size:21px;line-height:1.45}
-.section-title{margin-top:30px;margin-bottom:17px;font-size:24px;font-weight:bold}
+.subtitle{color:#AAA69C;font-size:20px;line-height:1.4}
+.section-title{margin-top:25px;margin-bottom:15px;font-size:23px;font-weight:bold}
 .section-title span{color:#D8B46A;margin-right:12px}
 .stock-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.stock-card{height:185px;padding:18px 21px;border:1px solid #39342A;border-radius:13px;background:linear-gradient(135deg,#1C1B17,#11110F);overflow:hidden}
-.stock-card:last-child{grid-column:1 / -1;width:100%;height:165px}
+.stock-card{height:205px;padding:17px 20px;border:1px solid #51452F;border-radius:13px;background:linear-gradient(135deg,#211F19,#11110F);overflow:hidden}
+.stock-card:last-child{grid-column:1 / -1;width:100%;height:180px}
 .stock-number{color:#D8B46A;font-size:15px;font-weight:bold;letter-spacing:2px}
-.stock-name{margin-top:9px;font-size:26px;font-weight:bold;color:#F5F1E8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.stock-change{margin-top:6px;font-size:22px;font-weight:bold}
-.up{color:#F07872}.down{color:#6DA9E8}.neutral{color:#D8B46A}
-.stock-reason{margin-top:9px;padding-top:9px;border-top:1px solid #393329;color:#BDB6A9;font-size:15px;line-height:1.4;word-break:keep-all;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.reason-label{color:#D8B46A;font-weight:bold;margin-right:5px}
-.stock-card:last-child .stock-reason{-webkit-line-clamp:2}
+.stock-name{margin-top:7px;font-size:25px;font-weight:bold;color:#F5F1E8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stock-change{margin-top:5px;font-size:21px;font-weight:bold;color:#E0BC73}
+.issue-divider{height:1px;margin-top:11px;background:#5A4A30}
+.issue-label{display:inline-block;margin-top:10px;padding:5px 10px;border-radius:4px;background:#5B4723;color:#FFE1A0;font-size:14px;font-weight:bold;letter-spacing:1.5px}
+.stock-reason{margin-top:8px;color:#F0E9DC;font-size:18px;font-weight:500;line-height:1.5;word-break:keep-all;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.stock-card:last-child .stock-reason{-webkit-line-clamp:3}
 .footer{position:absolute;left:65px;right:65px;bottom:35px;padding-top:16px;border-top:1px solid #393329;display:flex;justify-content:space-between;color:#817B70;font-size:16px;letter-spacing:2px}
 .footer strong{color:#D8B46A;font-size:20px}
 </style>
@@ -52,46 +52,46 @@ h1 span{color:#D8B46A}
     <div class="stock-card">
       <div class="stock-number">TOP 01</div>
       <div class="stock-name">{{11.featured_stocks; "1.name"}}</div>
-      <div class="stock-change {{11.featured_stocks; "1.change_percent"}}">
-        {{if(parseNumber(11.featured_stocks; "1.change_percent") > 0; "+"; "")}}{{11.featured_stocks; "1.change_percent"}}%
-      </div>
-      <div class="stock-reason"><span class="reason-label">KEY ISSUE</span>{{11.featured_stocks; "1.reason"}}</div>
+      <div class="stock-change">{{11.featured_stocks; "1.change_percent"}}%</div>
+      <div class="issue-divider"></div>
+      <div class="issue-label">KEY ISSUE</div>
+      <div class="stock-reason">{{11.featured_stocks; "1.reason"}}</div>
     </div>
 
     <div class="stock-card">
       <div class="stock-number">TOP 02</div>
       <div class="stock-name">{{11.featured_stocks; "2.name"}}</div>
-      <div class="stock-change {{11.featured_stocks; "2.change_percent"}}">
-        {{if(parseNumber(11.featured_stocks; "2.change_percent") > 0; "+"; "")}}{{11.featured_stocks; "2.change_percent"}}%
-      </div>
-      <div class="stock-reason"><span class="reason-label">KEY ISSUE</span>{{11.featured_stocks; "2.reason"}}</div>
+      <div class="stock-change">{{11.featured_stocks; "2.change_percent"}}%</div>
+      <div class="issue-divider"></div>
+      <div class="issue-label">KEY ISSUE</div>
+      <div class="stock-reason">{{11.featured_stocks; "2.reason"}}</div>
     </div>
 
     <div class="stock-card">
       <div class="stock-number">TOP 03</div>
       <div class="stock-name">{{11.featured_stocks; "3.name"}}</div>
-      <div class="stock-change {{11.featured_stocks; "3.change_percent"}}">
-        {{if(parseNumber(11.featured_stocks; "3.change_percent") > 0; "+"; "")}}{{11.featured_stocks; "3.change_percent"}}%
-      </div>
-      <div class="stock-reason"><span class="reason-label">KEY ISSUE</span>{{11.featured_stocks; "3.reason"}}</div>
+      <div class="stock-change">{{11.featured_stocks; "3.change_percent"}}%</div>
+      <div class="issue-divider"></div>
+      <div class="issue-label">KEY ISSUE</div>
+      <div class="stock-reason">{{11.featured_stocks; "3.reason"}}</div>
     </div>
 
     <div class="stock-card">
       <div class="stock-number">TOP 04</div>
       <div class="stock-name">{{11.featured_stocks; "4.name"}}</div>
-      <div class="stock-change {{11.featured_stocks; "4.change_percent"}}">
-        {{if(parseNumber(11.featured_stocks; "4.change_percent") > 0; "+"; "")}}{{11.featured_stocks; "4.change_percent"}}%
-      </div>
-      <div class="stock-reason"><span class="reason-label">KEY ISSUE</span>{{11.featured_stocks; "4.reason"}}</div>
+      <div class="stock-change">{{11.featured_stocks; "4.change_percent"}}%</div>
+      <div class="issue-divider"></div>
+      <div class="issue-label">KEY ISSUE</div>
+      <div class="stock-reason">{{11.featured_stocks; "4.reason"}}</div>
     </div>
 
     <div class="stock-card">
       <div class="stock-number">TOP 05</div>
       <div class="stock-name">{{11.featured_stocks; "5.name"}}</div>
-      <div class="stock-change {{11.featured_stocks; "5.change_percent"}}">
-        {{if(parseNumber(11.featured_stocks; "5.change_percent") > 0; "+"; "")}}{{11.featured_stocks; "5.change_percent"}}%
-      </div>
-      <div class="stock-reason"><span class="reason-label">KEY ISSUE</span>{{11.featured_stocks; "5.reason"}}</div>
+      <div class="stock-change">{{11.featured_stocks; "5.change_percent"}}%</div>
+      <div class="issue-divider"></div>
+      <div class="issue-label">KEY ISSUE</div>
+      <div class="stock-reason">{{11.featured_stocks; "5.reason"}}</div>
     </div>
 
   </div>
